@@ -16,6 +16,7 @@
   };
   const favouriteBooks = [];
   const bookList = document.querySelector(select.bookList);
+
   function render() {
     const thisBook = this;
     for(const book of dataSource.books){
@@ -23,52 +24,25 @@
       thisBook.element = utils.createDOMFromHTML(generateHTML);
       bookList.appendChild(thisBook.element);
     }
-  }
-  /*function initActions(){
-    const bookImages= bookList.querySelectorAll(select.bookImages);
-    for(const bookImage of bookImages){
-      bookImage.addEventListener('dblclick', function(event){
-        event.preventDefault();
-        const dataId = bookImage.getAttribute('data-id');
-        if(!favouriteBooks.includes(dataId)){
-          bookImage.classList.add('favorite');
-          favouriteBooks.push(dataId);
-          console.log(favouriteBooks);
-        }
-        else {
-          bookImage.classList.remove('favorite');
-          const indexOfBookImage = favouriteBooks.indexOf(dataId);
-          console.log(indexOfBookImage);
-          favouriteBooks.splice(indexOfBookImage,1);
-          console.log(favouriteBooks);
-        }
-      });
-      console.log(favouriteBooks);
-    }
-  }*/
+  } 
   function initActions(){
-    const bookImages= bookList.querySelectorAll(select.bookImages);
-    for(const bookImage of bookImages){
-      bookImage.addEventListener('dblclick', function(event){
-        event.preventDefault();
-        const dataId = bookImage.getAttribute('data-id');
-        if(!bookImage.getAttribute('class').includes('favorite')){
-          bookImage.classList.add('favorite');
-          favouriteBooks.push(dataId);
-          console.log(favouriteBooks);
-        }
-        else {
-          bookImage.classList.remove('favorite');
-          const indexOfBookImage = favouriteBooks.indexOf(dataId);
-          console.log(indexOfBookImage);
-          favouriteBooks.splice(indexOfBookImage,1);
-          console.log(favouriteBooks);
-        }
-      });
-      console.log(favouriteBooks);
-    }
-  }
- 
+    const thisBookImage = this;
+    const dataId = thisBookImage.getAttribute('data-id');
+    bookList.addEventListener('dblclick', function(event) {
+      event.preventDefault();
+      if(event.target.offsetParent.classList.contains('.book__image')){
+        thisBookImage.classList.add('favorite');
+        favouriteBooks.push(dataId);
+      }
+      else {
+        thisBookImage.classList.remove('favorite');
+        const indexOfBookImage = favouriteBooks.indexOf(dataId);
+        favouriteBooks.splice(indexOfBookImage, 1);
+      }
+    });
+      
+    console.log(favouriteBooks);
+  } 
   render();
   initActions();
 }
