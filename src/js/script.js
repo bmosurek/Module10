@@ -6,7 +6,8 @@
       bookTemplate: '#template-book'
     },
     bookList: '.books-list',
-    bookImages:'.book__image'
+    bookImages:'.book__image',
+    filtersForm: '.filters'
 
 
   };
@@ -16,6 +17,8 @@
   };
   const favouriteBooks = [];
   const bookList = document.querySelector(select.bookList);
+  const filtersForm = document.querySelector(select.filtersForm);
+  const filters =[];
 
   function render() {
     for(const book of dataSource.books){
@@ -25,13 +28,10 @@
     }
   } 
   function initActions(){
-  //const bookImages= bookList.querySelectorAll(select.bookImages);
     bookList.addEventListener('dblclick', function(event){
       event.preventDefault();
       const parentNode = event.target.offsetParent;
-      console.log('parentNode', parentNode);
       if(event.target.offsetParent.classList.contains('book__image')){
-        console.log('event.taget', event.target);
 
         const dataId = parentNode.getAttribute('data-id');
         if(!favouriteBooks.includes(dataId)){
@@ -45,9 +45,47 @@
         }
       }
     });
+    filtersForm.addEventListener('click', function(event){
+      event.preventDefault;
+      const tagName = event.target.tagName;
+      const type = event.target.getAttribute('type');
+      const name = event.target.getAttribute('name');
+      const label = event.target.value;
+      if(tagName == 'INPUT' && type == 'checkbox' && name == 'filter'){
+        if(event.target.checked == true) {
+          filters.push(label);
+        }
+        else {
+          const indexOfFilters = filters.indexOf(event.target.value);
+          filters.splice(indexOfFilters, 1);
+        }
+      }
+      filterBooks();
+    });
     
+  }
+  function filterBooks(){
+    for(let book of dataSource.books){
+      let bookId = book.id;
+      let bookLink = document.querySelector('.book__image[data-id="' + bookId + '"]');
+      let shouldBeHidden = false;
+      for(let filter of filters){
+        console.log('filter', filter);
+        console.log('book.details[filter]', book.details[filter]);
+        if(!book.details[filter] == false){
+          shouldBeHidden = true;
+          break;
+        }
+      }
+      if (shouldBeHidden == true){
+        bookLink.classList.add('hidden');
+      }
+      else{
+        bookLink.classList.remove('hidden');
+      }
+    }
+
   }
   render();
   initActions();
-  //initActions();
 }
