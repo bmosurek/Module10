@@ -35,11 +35,11 @@
     }
     render() {
       for(const book of dataSource.books){
+        book.ratingWidth = book.rating * 10;
+        book.ratingBgc = this.determineRatingBgc(book.rating);
         const generateHTML = templates.bookTemplate(book);
         book.element = utils.createDOMFromHTML(generateHTML);
         bookList.appendChild(book.element);
-        //const ratingBgc = determineRatingBgc(book);
-        //console.log(ratingBgc);
       }
     } 
     initActions(){
@@ -100,21 +100,20 @@
       }
 
     }
-    determineRatingBgc() {
-      const thisBookList = this;
-    /*
-    rating <6
-    background: linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);
-
-    rating >6 && <8
-    background: linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);
-
-    rating >8 && <=9
-    background: linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);
-
-    rating >9
-    background: linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);*/
+    determineRatingBgc(rating) {
+      if(rating < 6) {
+        return 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);';
+      }
+      else if(rating >6 && rating <=8){
+        return 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);';
+      }
+      else if(rating >8 && rating <=9){
+        return 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);';
+      }
+      else {
+        return 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);';
+      }
     }
   }
-  const app = new Booklist();
+  new Booklist();
 }
